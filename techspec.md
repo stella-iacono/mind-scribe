@@ -16,8 +16,8 @@ The system is not a mental-health diagnostic or treatment tool. The user remains
 ### Version 1 goals
 
 - Let an authenticated user write, save, and review their own journal entries.
-- Analyze one submitted entry for sentiment, themes, and emotional observations using an Azure-hosted LLM.
-- Show uncertainty and the original writing alongside the analysis.
+- Analyze a submitted entry for sentiment, themes, and emotional observations using an Azure-hosted LLM.
+- Show confidence score and the original writing alongside the analysis.
 - Persist an entry before analysis so model, network, or browser failures do not lose submitted writing.
 - Allow users to retry failed analysis and delete entries.
 - Keep sensitive writing out of application logs, analytics, and error reports.
