@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1480" height="960" viewBox="0 0 1480 960" role="img" aria-labelledby="title description">
+  <title id="title">Mind Scribe Azure architecture</title>
+  <desc id="description">Diagram of the current Mind Scribe prototype. The local browser signs in with Microsoft Entra ID and calls a public HTTPS API in Azure App Service. The API reaches Azure Database for PostgreSQL over App Service VNet integration, a PostgreSQL delegated subnet, and a linked private DNS zone. The UI is not yet hosted in Azure and AI analysis is not configured.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#102c27"/>
+      <stop offset="1" stop-color="#183f36"/>
+    </linearGradient>
+    <linearGradient id="azure" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fcff"/>
+      <stop offset="1" stop-color="#e8f4fb"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#071713" flood-opacity=".22"/>
+    </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M1 1L11 6 1 11" fill="none" stroke="#7ee0bd" stroke-width="2"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M1 1L11 6 1 11" fill="none" stroke="#3284bd" stroke-width="2"/>
+    </marker>
+    <style>
+      text { font-family: Inter, "Segoe UI", Arial, sans-serif; }
+      .title { fill:#f6f7ed; font-size:36px; font-weight:700; letter-spacing:-.7px; }
+      .subtitle { fill:#b8d2c8; font-size:16px; }
+      .eyebrow { fill:#679589; font-size:11px; font-weight:700; letter-spacing:1.6px; }
+      .cardtitle { fill:#173a32; font-size:18px; font-weight:700; }
+      .body { fill:#47665e; font-size:13px; }
+      .small { fill:#648078; font-size:11px; }
+      .white { fill:#f6f7ed; }
+      .mutedwhite { fill:#b8d2c8; }
+      .pill { font-size:11px; font-weight:700; letter-spacing:.4px; }
+    </style>
+  </defs>
+
+  <rect width="1480" height="960" rx="28" fill="url(#bg)"/>
+  <circle cx="1408" cy="72" r="165" fill="#ffffff" opacity=".025"/>
+  <circle cx="1408" cy="72" r="112" fill="none" stroke="#d4eadf" stroke-opacity=".08"/>
+
+  <text x="54" y="66" class="eyebrow" fill="#98cbb7">MIND SCRIBE · DEPLOYED PROTOTYPE</text>
+  <text x="54" y="111" class="title">How the Azure pieces work together</text>
+  <text x="54" y="143" class="subtitle">A private database path, Entra sign-in, and an API in Azure — with the web UI still running locally.</text>
+
+  <!-- external user and identity -->
+  <g filter="url(#shadow)">
+    <rect x="54" y="224" width="246" height="164" rx="20" fill="#fffdf7"/>
+    <rect x="54" y="224" width="246" height="8" rx="4" fill="#8ecdb1"/>
+  </g>
+  <circle cx="91" cy="273" r="20" fill="#e4f1e7"/>
+  <path d="M82 278c0-7 4-11 9-11s9 4 9 11M87 265a4 4 0 1 0 8 0 4 4 0 0 0-8 0" fill="none" stroke="#28624d" stroke-width="2" stroke-linecap="round"/>
+  <text x="122" y="270" class="eyebrow">TODAY · LOCAL</text>
+  <text x="76" y="320" class="cardtitle">User's browser</text>
+  <text x="76" y="345" class="body">React + TypeScript UI</text>
+  <text x="76" y="368" class="small">http://localhost:5173</text>
+
+  <g filter="url(#shadow)">
+    <rect x="54" y="534" width="246" height="176" rx="20" fill="#fffdf7"/>
+    <rect x="54" y="534" width="246" height="8" rx="4" fill="#5a9bd0"/>
+  </g>
+  <circle cx="91" cy="583" r="20" fill="#e5f1fb"/>
+  <path d="M91 569l12 5v8c0 8-5 13-12 17-7-4-12-9-12-17v-8z" fill="none" stroke="#357aaa" stroke-width="2" stroke-linejoin="round"/>
+  <text x="122" y="580" class="eyebrow">IDENTITY · ENTRA ID</text>
+  <text x="76" y="628" class="cardtitle">Mind Scribe tenant</text>
+  <text x="76" y="653" class="body">Web + API app registrations</text>
+  <text x="76" y="677" class="small">Sign-in and delegated API token</text>
+  <text x="76" y="696" class="small">Tenant: a669c967…</text>
+
+  <!-- resource group -->
+  <rect x="350" y="184" width="1074" height="620" rx="28" fill="#f3f8f6" stroke="#b3d2c6" stroke-width="2"/>
+  <rect x="350" y="184" width="1074" height="58" rx="28" fill="#e5f0ec"/>
+  <path d="M350 214v28h1074v-28" fill="#e5f0ec"/>
+  <text x="378" y="220" class="eyebrow">AZURE RESOURCE GROUP</text>
+  <text x="590" y="220" class="cardtitle" font-size="16">rg-MindScribe</text>
+  <text x="1350" y="220" text-anchor="end" class="small">West US 3</text>
+
+  <!-- App Service plan -->
+  <rect x="382" y="263" width="1010" height="62" rx="15" fill="#e8f3fb" stroke="#c3dcec"/>
+  <circle cx="410" cy="294" r="13" fill="#4a95c7"/>
+  <path d="M404 294h12M410 288v12" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+  <text x="436" y="291" class="cardtitle" font-size="15">App Service plan · ASP-rgMindScribe-a43b</text>
+  <text x="436" y="311" class="small">Basic B1 · Linux · one worker · supplies compute for the API</text>
+
+  <!-- API box -->
+  <rect x="382" y="365" width="284" height="204" rx="20" fill="url(#azure)" stroke="#b8d8eb" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="382" y="365" width="284" height="8" rx="4" fill="#368bc2"/>
+  <circle cx="420" cy="415" r="21" fill="#d9edf9"/>
+  <path d="M410 408h20M410 415h20M410 422h13" stroke="#2777ab" stroke-width="2.5" stroke-linecap="round"/>
+  <text x="454" y="412" class="eyebrow">PUBLIC HTTPS API</text>
+  <text x="404" y="462" class="cardtitle">App Service · mindscribe</text>
+  <text x="404" y="489" class="body">FastAPI · Python 3.12</text>
+  <text x="404" y="514" class="small">Validates Entra tokens; enforces user</text>
+  <text x="404" y="532" class="small">allowlist; reads and writes entries.</text>
+  <rect x="404" y="544" width="108" height="20" rx="10" fill="#d8efe3"/>
+  <text x="458" y="558" text-anchor="middle" class="pill" fill="#276249">HTTPS ONLY</text>
+
+  <!-- VNet boundary -->
+  <rect x="706" y="351" width="686" height="413" rx="24" fill="#edf7f0" stroke="#77b795" stroke-width="2" stroke-dasharray="8 6"/>
+  <rect x="730" y="366" width="368" height="48" rx="14" fill="#dcefe3"/>
+  <text x="750" y="387" class="eyebrow" fill="#34775a">PRIVATE NETWORK · VNET</text>
+  <text x="750" y="405" class="small">mindscribe-network · 10.0.0.0/16</text>
+
+  <!-- DB subnet -->
+  <rect x="730" y="435" width="333" height="289" rx="18" fill="#fffdf7" stroke="#c8ddd0"/>
+  <text x="750" y="463" class="eyebrow">DELEGATED DATABASE SUBNET</text>
+  <text x="750" y="484" class="small">subnet-62dmj6g6piwiw · 10.0.2.0/24</text>
+  <rect x="752" y="512" width="289" height="171" rx="17" fill="#fff8e9" stroke="#ead8a9"/>
+  <circle cx="791" cy="550" r="20" fill="#f4e7c7"/>
+  <ellipse cx="791" cy="545" rx="10" ry="4" fill="none" stroke="#9d7421" stroke-width="2"/>
+  <path d="M781 545v13c0 5 20 5 20 0v-13M781 552c0 5 20 5 20 0" fill="none" stroke="#9d7421" stroke-width="2"/>
+  <text x="822" y="549" class="eyebrow" fill="#94701e">PRIVATE DATABASE</text>
+  <text x="772" y="593" class="cardtitle" font-size="16">PostgreSQL Flexible Server</text>
+  <text x="772" y="619" class="body">mindscribe-server · PostgreSQL 14</text>
+  <text x="772" y="642" class="small">General Purpose · 128 GiB</text>
+  <rect x="772" y="653" width="152" height="20" rx="10" fill="#f5e8c8"/>
+  <text x="848" y="667" text-anchor="middle" class="pill" fill="#856318">PUBLIC ACCESS OFF</text>
+
+  <!-- integration subnet -->
+  <rect x="1083" y="435" width="284" height="142" rx="18" fill="#fffdf7" stroke="#c8ddd0"/>
+  <text x="1101" y="463" class="eyebrow">APP SERVICE INTEGRATION</text>
+  <text x="1101" y="484" class="small">subnet-appservice-integration</text>
+  <text x="1101" y="502" class="small">10.0.3.0/24 · outbound path</text>
+  <rect x="1101" y="520" width="248" height="39" rx="12" fill="#e6f4eb"/>
+  <path d="M1118 539h21m-7-7 7 7-7 7" fill="none" stroke="#377d5b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="1151" y="543" class="small" fill="#326b4f">App Service VNet integration</text>
+
+  <!-- private DNS -->
+  <rect x="1083" y="594" width="284" height="130" rx="18" fill="#f1edfb" stroke="#d4c8ed"/>
+  <circle cx="1115" cy="628" r="17" fill="#e1d8f4"/>
+  <text x="1115" y="633" text-anchor="middle" font-size="13" font-weight="700" fill="#66539a">DNS</text>
+  <text x="1142" y="626" class="eyebrow" fill="#725fa3">PRIVATE DNS ZONE</text>
+  <text x="1102" y="664" class="body">privatelink.postgres.database.azure.com</text>
+  <text x="1102" y="688" class="small">VNet link: Completed · resolves DB privately</text>
+  <text x="1102" y="708" class="small">2 records</text>
+
+  <!-- connections -->
+  <path d="M300 294H382" fill="none" stroke="#7ee0bd" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="309" y="265" width="66" height="22" rx="11" fill="#244d41"/>
+  <text x="342" y="280" text-anchor="middle" class="pill" fill="#c8f2df">HTTPS</text>
+
+  <path d="M177 388v146" fill="none" stroke="#8db8da" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrowBlue)"/>
+  <rect x="87" y="438" width="180" height="28" rx="14" fill="#244d41"/>
+  <text x="177" y="457" text-anchor="middle" class="pill" fill="#c4ddf0">SIGN-IN · API TOKEN</text>
+
+  <path d="M666 468H706" fill="none" stroke="#4d9b74" stroke-width="3" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+  <rect x="648" y="436" width="99" height="22" rx="11" fill="#dcefe3"/>
+  <text x="697" y="451" text-anchor="middle" class="pill" fill="#34775a">VNET ROUTE</text>
+
+  <path d="M1101 539H1041" fill="none" stroke="#4d9b74" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="1071" y="529" text-anchor="middle" class="small" fill="#34775a">private route</text>
+
+  <!-- not deployed strip -->
+  <rect x="54" y="840" width="1370" height="90" rx="18" fill="#244b40" stroke="#557c6e"/>
+  <rect x="76" y="858" width="167" height="39" rx="12" fill="#f3e5bd"/>
+  <text x="159" y="882" text-anchor="middle" class="pill" fill="#785d20">NOT CONFIGURED</text>
+  <text x="266" y="873" class="white" font-size="15" font-weight="700">Two planned capabilities are not live yet</text>
+  <text x="266" y="896" class="mutedwhite" font-size="13">Azure-hosted web UI · AI reflection provider</text>
+  <text x="1396" y="879" text-anchor="end" class="small" fill="#c5d9d0">UI runs locally; entry persistence works; analysis returns unavailable.</text>
+  <text x="266" y="914" class="small" fill="#c5d9d0">Other provisioned resources: GitHub OIDC deployment identities and a separate CIAM directory (not on the live sign-in path).</text>
+</svg>
